@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по географии: Литосфера</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e6f2ff, #cce0ff);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #3498db;
+            font-size: 1.2rem;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .instructions h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 15px;
+            background-color: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            background-color: #e8f4f8;
+            border-color: #3498db;
+        }
+        
+        .option.selected {
+            background-color: #d1ecf1;
+            border-color: #17a2b8;
+        }
+        
+        .option.correct {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .btn-submit {
+            background-color: #27ae60;
+        }
+        
+        .btn-submit:hover {
+            background-color: #219653;
+        }
+        
+        .results {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .results h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin: 20px 0;
+        }
+        
+        .score-details {
+            margin: 20px 0;
+            font-size: 1.1rem;
+        }
+        
+        .feedback {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            text-align: left;
+        }
+        
+        .feedback h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .feedback-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .feedback-question {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .feedback-answer {
+            color: #28a745;
+            margin-bottom: 5px;
+        }
+        
+        .feedback-explanation {
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .timer {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Тест по географии</h1>
+            <p class="subtitle">Тема: Литосфера</p>
+        </header>
+        
+        <div class="instructions">
+            <h2>Инструкция к тесту</h2>
+            <ul>
+                <li>Тест состоит из 15 вопросов по теме "Литосфера"</li>
+                <li>На каждый вопрос есть только один правильный ответ</li>
+                <li>Выберите вариант ответа, который считаете верным</li>
+                <li>После выбора ответа нажмите кнопку "Далее"</li>
+                <li>В конце теста вы увидите свой результат и правильные ответы</li>
+            </ul>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="timer" id="timer">Время: 15:00</div>
+        
+        <div id="question-1" class="question-container active">
+            <div class="question-number">Вопрос 1 из 15</div>
+            <div class="question-text">Что такое литосфера?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Водная оболочка Земли</div>
+                <div class="option" data-value="b">B) Воздушная оболочка Земли</div>
+                <div class="option" data-value="c">C) Твердая (каменная) оболочка Земли</div>
+                <div class="option" data-value="d">D) Биологическая оболочка Земли</div>
+            </div>
+        </div>
+        
+        <div id="question-2" class="question-container">
+            <div class="question-number">Вопрос 2 из 15</div>
+            <div class="question-text">Как называется внешний слой твердой породы, покрывающий Землю?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Мантия</div>
+                <div class="option" data-value="b">B) Ядро</div>
+                <div class="option" data-value="c">C) Земная кора</div>
+                <div class="option" data-value="d">D) Астеносфера</div>
+            </div>
+        </div>
+        
+        <div id="question-3" class="question-container">
+            <div class="question-number">Вопрос 3 из 15</div>
+            <div class="question-text">Какие типы земной коры существуют?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Океаническая и материковая</div>
+                <div class="option" data-value="b">B) Верхняя и нижняя</div>
+                <div class="option" data-value="c">C) Тонкая и толстая</div>
+                <div class="option" data-value="d">D) Старая и новая</div>
+            </div>
+        </div>
+        
+        <div id="question-4" class="question-container">
+            <div class="question-number">Вопрос 4 из 15</div>
+            <div class="question-text">Из скольких слоев состоит материковая земная кора?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) 1 слой</div>
+                <div class="option" data-value="b">B) 2 слоя</div>
+                <div class="option" data-value="c">C) 3 слоя</div>
+                <div class="option" data-value="d">D) 4 слоя</div>
+            </div>
+        </div>
+        
+        <div id="question-5" class="question-container">
+            <div class="question-number">Вопрос 5 из 15</div>
+            <div class="question-text">Какие слои входят в состав материковой земной коры?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Осадочный, гранитный, базальтовый</div>
+                <div class="option" data-value="b">B) Осадочный, гранитный, мантийный</div>
+                <div class="option" data-value="c">C) Осадочный, базальтовый, ядерный</div>
+                <div class="option" data-value="d">D) Гранитный, базальтовый, мантийный</div>
+            </div>
+        </div>
+        
+        <div id="question-6" class="question-container">
+            <div class="question-number">Вопрос 6 из 15</div>
+            <div class="question-text">Какова толщина земной коры под горами?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) 5-10 км</div>
+                <div class="option" data-value="b">B) 10-20 км</div>
+                <div class="option" data-value="c">C) 30-40 км</div>
+                <div class="option" data-value="d">D) 70-80 км</div>
+            </div>
+        </div>
+        
+        <div id="question-7" class="question-container">
+            <div class="question-number">Вопрос 7 из 15</div>
+            <div class="question-text">Что находится под земной корой?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Ядро</div>
+                <div class="option" data-value="b">B) Мантия</div>
+                <div class="option" data-value="c">C) Астеносфера</div>
+                <div class="option" data-value="d">D) Литосфера</div>
+            </div>
+        </div>
+        
+        <div id="question-8" class="question-container">
+            <div class="question-number">Вопрос 8 из 15</div>
+            <div class="question-text">Какова толщина мантии?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) 1000 км</div>
+                <div class="option" data-value="b">B) 2900 км</div>
+                <div class="option" data-value="c">C) 3500 км</div>
+                <div class="option" data-value="d">D) 5000 км</div>
+            </div>
+        </div>
+        
+        <div id="question-9" class="question-container">
+            <div class="question-number">Вопрос 9 из 15</div>
+            <div class="question-text">Из каких элементов состоит ядро Земли?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Кислорода и кремния</div>
+                <div class="option" data-value="b">B) Никеля и железа</div>
+                <div class="option" data-value="c">C) Алюминия и кальция</div>
+                <div class="option" data-value="d">D) Углерода и водорода</div>
+            </div>
+        </div>
+        
+        <div id="question-10" class="question-container">
+            <div class="question-number">Вопрос 10 из 15</div>
+            <div class="question-text">Как называется процесс растяжения и раздвижения литосферных плит?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Субдукция</div>
+                <div class="option" data-value="b">B) Коллизия</div>
+                <div class="option" data-value="c">C) Спрединг</div>
+                <div class="option" data-value="d">D) Дивергенция</div>
+            </div>
+        </div>
+        
+        <div id="question-11" class="question-container">
+            <div class="question-number">Вопрос 11 из 15</div>
+            <div class="question-text">Какие горные породы образуются из магмы?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Осадочные</div>
+                <div class="option" data-value="b">B) Магматические</div>
+                <div class="option" data-value="c">C) Метаморфические</div>
+                <div class="option" data-value="d">D) Вулканические</div>
+            </div>
+        </div>
+        
+        <div id="question-12" class="question-container">
+            <div class="question-number">Вопрос 12 из 15</div>
+            <div class="question-text">Какая магматическая порода относится к интрузивным?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Базальт</div>
+                <div class="option" data-value="b">B) Вулканический туф</div>
+                <div class="option" data-value="c">C) Гранит</div>
+                <div class="option" data-value="d">D) Обсидиан</div>
+            </div>
+        </div>
+        
+        <div id="question-13" class="question-container">
+            <div class="question-number">Вопрос 13 из 15</div>
+            <div class="question-text">Какие горные породы образуются на поверхности земной коры?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Магматические</div>
+                <div class="option" data-value="b">B) Метаморфические</div>
+                <div class="option" data-value="c">C) Осадочные</div>
+                <div class="option" data-value="d">D) Плутонические</div>
+            </div>
+        </div>
+        
+        <div id="question-14" class="question-container">
+            <div class="question-number">Вопрос 14 из 15</div>
+            <div class="question-text">Какая метаморфическая порода образуется из известняка?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Гнейс</div>
+                <div class="option" data-value="b">B) Кварцит</div>
+                <div class="option" data-value="c">C) Мрамор</div>
+                <div class="option" data-value="d">D) Кристаллические сланцы</div>
+            </div>
+        </div>
+        
+        <div id="question-15" class="question-container">
+            <div class="question-number">Вопрос 15 из 15</div>
+            <div class="question-text">Кто сформулировал концепцию дрейфа материков в 1912 году?</div>
+            <div class="options">
+                <div class="option" data-value="a">A) Г. Хесс</div>
+                <div class="option" data-value="b">B) Р. Дитц</div>
+                <div class="option" data-value="c">C) А. Вегенер</div>
+                <div class="option" data-value="d">D) Ч. Дарвин</div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <button class="btn" id="prevBtn" disabled>Назад</button>
+            <button class="btn" id="nextBtn">Далее</button>
+            <button class="btn btn-submit" id="submitBtn" style="display: none;">Завершить тест</button>
+        </div>
+        
+        <div class="results" id="results">
+            <h2>Результаты теста</h2>
+            <div class="score" id="score">0/15</div>
+            <div class="score-details" id="scoreDetails"></div>
+            
+            <div class="feedback" id="feedback">
+                <h3>Правильные ответы:</h3>
+                <!-- Здесь будут отображаться правильные ответы -->
+            </div>
+            
+            <button class="btn" id="restartBtn" style="margin-top: 20px;">Пройти тест еще раз</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Правильные ответы
+            const correctAnswers = {
+                1: 'c',
+                2: 'c',
+                3: 'a',
+                4: 'c',
+                5: 'a',
+                6: 'd',
+                7: 'b',
+                8: 'b',
+                9: 'b',
+                10: 'c',
+                11: 'b',
+                12: 'c',
+                13: 'c',
+                14: 'c',
+                15: 'c'
+            };
+            
+            // Объяснения к ответам
+            const explanations = {
+                1: 'Литосфера - это твердая (каменная) оболочка Земли.',
+                2: 'Внешний слой твердой породы, который покрывает Землю, называется земной корой.',
+                3: 'Существует два типа земной коры: материковая и океаническая.',
+                4: 'Материковая земная кора состоит из трех слоев: осадочного, гранитного и базальтового.',
+                5: 'Материковая земная кора состоит из осадочного, гранитного и базальтового слоев.',
+                6: 'Толщина земной коры под горами составляет 70-80 км.',
+                7: 'Под земной корой находится мантия.',
+                8: 'Толщина мантии составляет 2900 км.',
+                9: 'Ядро Земли состоит из никеля и железа.',
+                10: 'Спрединг - это процесс растяжения и раздвижения литосферных плит.',
+                11: 'Магматические горные породы образуются в процессе остывания и затвердевания расплавленной магмы.',
+                12: 'Гранит относится к интрузивным магматическим породам.',
+                13: 'Осадочные горные породы образуются на поверхности земной коры.',
+                14: 'Из известняка образуется мрамор в процессе метаморфизма.',
+                15: 'Концепцию дрейфа материков сформулировал А. Вегенер в 1912 году.'
+            };
+            
+            const questions = document.querySelectorAll('.question-container');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const progressBar = document.getElementById('progress');
+            const timerElement = document.getElementById('timer');
+            const results = document.getElementById('results');
+            const scoreElement = document.getElementById('score');
+            const scoreDetails = document.getElementById('scoreDetails');
+            const feedbackElement = document.getElementById('feedback');
+            
+            let currentQuestion = 0;
+            let userAnswers = {};
+            let timeLeft = 15 * 60; // 15 минут в секундах
+            let timer;
+            
+            // Инициализация таймера
+            function startTimer() {
+                timer = setInterval(function() {
+                    timeLeft--;
+                    updateTimer();
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        finishTest();
+                    }
+                }, 1000);
+            }
+            
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `Время: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Обновление прогресс-бара
+            function updateProgress() {
+                const progress = ((currentQuestion + 1) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            // Показ текущего вопроса
+            function showQuestion(index) {
+                questions.forEach((question, i) => {
+                    question.classList.toggle('active', i === index);
+                });
+                
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === questions.length - 1;
+                
+                if (index === questions.length - 1) {
+                    nextBtn.style.display = 'none';
+                    submitBtn.style.display = 'block';
+                } else {
+                    nextBtn.style.display = 'block';
+                    submitBtn.style.display = 'none';
+                }
+                
+                updateProgress();
+                
+                // Восстановление выбранного ответа, если он есть
+                const questionId = index + 1;
+                if (userAnswers[questionId]) {
+                    const options = questions[index].querySelectorAll('.option');
+                    options.forEach(option => {
+                        if (option.dataset.value === userAnswers[questionId]) {
+                            option.classList.add('selected');
+                        }
+                    });
+                }
+            }
+            
+            // Обработка выбора ответа
+            function setupOptionListeners() {
+                questions.forEach((question, index) => {
+                    const options = question.querySelectorAll('.option');
+                    options.forEach(option => {
+                        option.addEventListener('click', function() {
+                            // Снимаем выделение с других вариантов
+                            options.forEach(opt => opt.classList.remove('selected'));
+                            // Выделяем выбранный вариант
+                            this.classList.add('selected');
+                            
+                            // Сохраняем ответ пользователя
+                            const questionId = index + 1;
+                            userAnswers[questionId] = this.dataset.value;
+                        });
+                    });
+                });
+            }
+            
+            // Переход к следующему вопросу
+            nextBtn.addEventListener('click', function() {
+                if (currentQuestion < questions.length - 1) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                }
+            });
+            
+            // Переход к предыдущему вопросу
+            prevBtn.addEventListener('click', function() {
+                if (currentQuestion > 0) {
+                    currentQuestion--;
+                    showQuestion(currentQuestion);
+                }
+            });
+            
+            // Завершение теста
+            submitBtn.addEventListener('click', finishTest);
+            
+            function finishTest() {
+                clearInterval(timer);
+                
+                // Подсчет правильных ответов
+                let correctCount = 0;
+                for (let i = 1; i <= questions.length; i++) {
+                    if (userAnswers[i] === correctAnswers[i]) {
+                        correctCount++;
+                    }
+                }
+                
+                // Показ результатов
+                scoreElement.textContent = `${correctCount}/${questions.length}`;
+                
+                let percentage = (correctCount / questions.length) * 100;
+                let message = '';
+                
+                if (percentage >= 90) {
+                    message = 'Отличный результат! Вы отлично усвоили тему "Литосфера"!';
+                } else if (percentage >= 70) {
+                    message = 'Хороший результат! Вы хорошо знаете материал по теме "Литосфера".';
+                } else if (percentage >= 50) {
+                    message = 'Удовлетворительный результат. Рекомендуется повторить материал.';
+                } else {
+                    message = 'Результат ниже ожидаемого. Рекомендуется изучить тему "Литосфера" более внимательно.';
+                }
+                
+                scoreDetails.textContent = message;
+                
+                // Показ правильных ответов
+                let feedbackHTML = '<h3>Правильные ответы:</h3>';
+                for (let i = 1; i <= questions.length; i++) {
+                    const userAnswer = userAnswers[i] || 'Не ответил';
+                    const isCorrect = userAnswer === correctAnswers[i];
+                    
+                    feedbackHTML += `
+                        <div class="feedback-item">
+                            <div class="feedback-question">Вопрос ${i}: ${questions[i-1].querySelector('.question-text').textContent}</div>
+                            <div class="feedback-answer">Правильный ответ: ${getOptionText(i, correctAnswers[i])}</div>
+                            <div>Ваш ответ: ${getOptionText(i, userAnswer)} ${isCorrect ? '✓' : '✗'}</div>
+                            <div class="feedback-explanation">${explanations[i]}</div>
+                        </div>
+                    `;
+                }
+                
+                feedbackElement.innerHTML = feedbackHTML;
+                
+                // Скрываем вопросы и показываем результаты
+                document.querySelectorAll('.question-container').forEach(q => q.style.display = 'none');
+                document.querySelector('.navigation').style.display = 'none';
+                results.style.display = 'block';
+            }
+            
+            // Функция для получения текста варианта ответа
+            function getOptionText(questionId, optionValue) {
+                const question = document.getElementById(`question-${questionId}`);
+                if (!question) return optionValue;
+                
+                const option = question.querySelector(`.option[data-value="${optionValue}"]`);
+                return option ? option.textContent : optionValue;
+            }
+            
+            // Перезапуск теста
+            restartBtn.addEventListener('click', function() {
+                currentQuestion = 0;
+                userAnswers = {};
+                timeLeft = 15 * 60;
+                
+                // Сбрасываем выделение ответов
+                document.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // Показываем первый вопрос и навигацию
+                showQuestion(0);
+                document.querySelector('.navigation').style.display = 'flex';
+                results.style.display = 'none';
+                
+                // Запускаем таймер заново
+                clearInterval(timer);
+                startTimer();
+            });
+            
+            // Инициализация
+            setupOptionListeners();
+            showQuestion(0);
+            startTimer();
+        });
+    </script>
+</body>
+</html>
